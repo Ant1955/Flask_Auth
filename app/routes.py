@@ -46,7 +46,6 @@ def logout():
 @app.route('/account')
 @login_required
 def account():
-
     return render_template('account.html')
 
 
@@ -54,17 +53,34 @@ def account():
 @login_required
 def change():
     form = ChangePasswordForm()
+    if form.validate_on_submit():
+        user = User.query.get(current_user.id)
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_password
+        db.session.replace(user)
+        db.session.commit()
+        return redirect(url_for('home'))
     return render_template('change.html', form=form, title='Change Password')
 
 @app.route('/change_email', methods=['GET', 'POST'])
 @login_required
 def change_email():
     form = ChangeEmailForm()
+    if form.validate_on_submit():
+        user = User.query.get(current_user.id)
+        user.email = form.email.data
+        db.session.replace(user)
+        db.session.commit()
+        return redirect(url_for('home'))
     return render_template('change_email.html', form=form, title='Change Email')
 
 @app.route('/delete', methods=['GET', 'POST'])
 @login_required
 def delete():
     form = DeleteForm()
+    if form.validate_on_submit():
+        db.session.delete(current_user)
+        db.session.commit()
+        return redirect(url_for('home'))
     return render_template('delete.html', form=form, title='Delete Account')
 

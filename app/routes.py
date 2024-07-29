@@ -58,7 +58,8 @@ def change():
         user.password = hashed_password
         db.session.replace(user)
         db.session.commit()
-        return redirect(url_for('home'))
+        flash('Ваш пароль был изменен', 'success')
+        return redirect(url_for('login'))
     return render_template('change.html', form=form, title='Change Password')
 
 @app.route('/change_email', methods=['GET', 'POST'])
@@ -70,7 +71,8 @@ def change_email():
         user.email = form.email.data
         db.session.replace(user)
         db.session.commit()
-        return redirect(url_for('home'))
+        flash('Ваш E-mail был изменен', 'success')
+        return redirect(url_for('login'))
     return render_template('change_email.html', form=form, title='Change Email')
 
 @app.route('/delete', methods=['GET', 'POST'])
@@ -80,7 +82,7 @@ def delete():
     if form.validate_on_submit():
         db.session.delete(current_user)
         db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     return render_template('delete.html', form=form, title='Delete Account')
 
 

@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from app.models import User
 from app import app, db, bcrypt
-from app.forms import RegistrationForm, LoginForm, DeleteForm, ChangeEmailForm, ChangePasswordForm, ChangeUsernameForm
+from app.forms import RegistrationForm, LoginForm, DeleteForm, ChangeEmailForm, ChangePasswordForm, ChangeUserForm
 
 @app.route('/')
 @app.route('/home')
@@ -83,4 +83,17 @@ def delete():
         db.session.commit()
         return redirect(url_for('home'))
     return render_template('delete.html', form=form, title='Delete Account')
+
+
+@app.route('/change_name', methods=['GET', 'POST'])
+@login_required
+def change_name():
+    form = ChangeUserForm()
+    if form.validate_on_submit():
+        user = User.query.get(current_user.id)
+        user.username = form.username.data
+        db.session.replace(user)
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template('change_name.html', form=form, title='Change Name')
 

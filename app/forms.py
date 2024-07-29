@@ -40,10 +40,6 @@ class ChangeEmailForm(FlaskForm):
             if user:
                 raise ValidationError('Такая почта уже используется')
 
-    def validate_email(self, email):
-        email = User.query.filter_by(email=email.data).first()
-        if email:
-            raise ValidationError('Такая почта уже используется')
 
 class ChangePasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])

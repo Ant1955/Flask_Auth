@@ -49,3 +49,14 @@ class ChangePasswordForm(FlaskForm):
 
 class DeleteForm(FlaskForm):
     submit = SubmitField('удалить аккаунт из системы')
+
+
+class ChangeUserForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=35)])
+    submit = SubmitField('сохранить новое имя в профиле')
+
+    def validate_username(self, username):
+        if username.data != current_user.username:
+            user = User.query.filter_by(username=username.data).first()
+            if user:
+                raise ValidationError('Такое имя уже существует')

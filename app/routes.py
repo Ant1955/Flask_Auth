@@ -56,7 +56,6 @@ def change():
         user = User.query.get(current_user.id)
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user.password = hashed_password
-        db.session.replace(user)
         db.session.commit()
         flash('Ваш пароль был изменен', 'success')
         return redirect(url_for('login'))
@@ -68,8 +67,7 @@ def change_email():
     form = ChangeEmailForm()
     if form.validate_on_submit():
         user = User.query.get(current_user.id)
-        user.email = form.email.data
-        db.session.replace(user)
+        user.email = form.email.dat
         db.session.commit()
         flash('Ваш E-mail был изменен', 'success')
         return redirect(url_for('login'))
@@ -93,7 +91,6 @@ def change_name():
     if form.validate_on_submit():
         user = User.query.get(current_user.id)
         user.username = form.username.data
-        db.session.replace(user)
         db.session.commit()
         return redirect(url_for('home'))
     return render_template('change_name.html', form=form, title='Change Name')

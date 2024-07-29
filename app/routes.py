@@ -48,7 +48,6 @@ def logout():
 def account():
     return render_template('account.html')
 
-
 @app.route('/change', methods=['GET', 'POST'])
 @login_required
 def change():

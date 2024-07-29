@@ -53,6 +53,7 @@ class DeleteForm(FlaskForm):
 
 class ChangeUserForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=35)])
+    password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('сохранить новое имя в профиле')
 
     def validate_username(self, username):
